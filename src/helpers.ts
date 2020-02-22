@@ -4,6 +4,192 @@ import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
 import fetch from 'node-fetch'
 import { TextDecoder, TextEncoder } from 'util'
 
+export const array = [
+    {
+        state: 'Andaman and Nicobar Islands',
+        abbreviation: 'AN',
+        date: '2020/2/22'
+    },
+    {
+        state: 'Andhra Pradesh',
+        abbreviation: 'AP',
+        date: '2020/2/23'
+    },
+    {
+        state: 'Arunachal Pradesh',
+        abbreviation: 'AR',
+        date: '2020/2/24'
+    },
+    {
+        state: 'Assam',
+        abbreviation: 'AS',
+        date: '2020/2/25'
+    },
+    {
+        state: 'Bihar',
+        abbreviation: '	BR',
+        date: '2020/2/26'
+    },
+    {
+        state: 'Chandigarh',
+        abbreviation: 'CH',
+        date: '2020/2/27'
+    },
+    {
+        state: 'Chhattisgarh',
+        abbreviation: 'CT',
+        date: '2020/2/28'
+    },
+    {
+        state: 'Dadra and Nagar Haveli',
+        abbreviation: 'DN',
+        date: '2020/2/29'
+    },
+    {
+        state: 'Daman and Diu',
+        abbreviation: 'DD',
+        date: '2020/3/01'
+    },
+    {
+        state: 'Delhi',
+        abbreviation: 'DL',
+        date: '2020/3/02'
+    },
+    {
+        state: 'Goa',
+        abbreviation: 'GA',
+        date: '2020/3/03'
+    },
+    {
+        state: 'Gujarat',
+        abbreviation: 'GJ',
+        date: '2020/3/04'
+    },
+    {
+        state: 'Haryana',
+        abbreviation: 'HR',
+        date: '2020/3/05'
+    },
+    {
+        state: 'Himachal Pradesh',
+        abbreviation: 'HP',
+        date: '2020/3/06'
+    },
+    {
+        state: 'Jammu and Kashmir',
+        abbreviation: 'JK',
+        date: '2020/3/07'
+    },
+    {
+        state: 'Jharkhand',
+        abbreviation: 'JH',
+        date: '2020/3/08'
+    },
+    {
+        state: 'Karnataka',
+        abbreviation: 'KA',
+        date: '2020/3/09'
+    },
+    {
+        state: 'Kerala',
+        abbreviation: 'KL',
+        date: '2020/3/10'
+    },
+    {
+        state: 'Lakshadweep',
+        abbreviation: 'LD',
+        date: '2020/3/11'
+    },
+    {
+        state: 'Madhya Pradesh',
+        abbreviation: 'MP',
+        date: '2020/3/12'
+    },
+    {
+        state: 'Maharashtra',
+        abbreviation: '	MH',
+        date: '2020/3/13'
+    },
+    {
+        state: 'Manipur',
+        abbreviation: 'MN',
+        date: '2020/3/10'
+    },
+    {
+        state: 'Meghalaya',
+        abbreviation: 'ML',
+        date: '2020/3/15'
+    },
+    {
+        state: 'Mizoram',
+        abbreviation: '	MZ',
+        date: '2020/3/16'
+    },
+    {
+        state: 'Nagaland',
+        abbreviation: 'NL',
+        date: '2020/3/17'
+    },
+    {
+        state: 'Odisha',
+        abbreviation: 'OR',
+        date: '2020/3/18'
+    },
+    {
+        state: 'Puducherry',
+        abbreviation: '	PY',
+        date: '2020/3/19'
+    },
+    {
+        state: 'Punjab',
+        abbreviation: 'PB',
+        date: '2020/3/20'
+    },
+
+    {
+        state: 'Rajasthan',
+        abbreviation: 'RJ',
+        date: '2020/3/21'
+    },
+
+    {
+        state: 'Sikkim',
+        abbreviation: 'SK',
+        date: '2020/3/22'
+    },
+
+    {
+        state: 'Tamil Nadu',
+        abbreviation: 'TN',
+        date: '2020/3/23'
+    },
+    {
+        state: 'Telangana',
+        abbreviation: 'TG',
+        date: '2020/3/24'
+    },
+    {
+        state: 'Tripura',
+        abbreviation: 'TR',
+        date: '2020/3/25'
+    },
+    {
+        state: 'Uttar Pradesh',
+        abbreviation: 'UP',
+        date: '2020/3/26'
+    },
+    {
+        state: 'Uttarakhand',
+        abbreviation: 'UT',
+        date: '2020/3/27'
+    },
+    {
+        state: 'West Bengal',
+        abbreviation: 'WB',
+        date: '2020/3/28'
+    }
+
+]
 export function getSingleBy<T = any>(
     table: ObjectType<T> | EntitySchema<T>
 ): (filter: Partial<T>) => Promise<T> {
@@ -30,35 +216,6 @@ export function getTime() {
     return {
         current: JSON.stringify(current),
         newDate: JSON.stringify(newDate)
-    }
-}
-
-export const transaction = async (waxUsername, creditAmount, privateKey) => {
-    const signatureProvider = new JsSignatureProvider([privateKey])
-    const rpc = new JsonRpc(process.env.CONTRACT_URL, { fetch })
-    const api = new Api({ rpc, signatureProvider, textDecoder: new TextDecoder(), textEncoder: new TextEncoder() })
-    try {
-        return await api.transact({
-            actions: [{
-                account: process.env.CONTRACT_ACCOUNT,
-                name: process.env.TRANSACTION_ACTION,
-                authorization: [{
-                    actor: process.env.CONTRACT_ACTOR,
-                    permission: process.env.TRANSACTION_PERMISSION,
-                }],
-                data: {
-                    username: process.env.CONTRACT_NAME,
-                    sponsor: waxUsername,
-                    cointype: process.env.TRANSACTION_COINTYPE,
-                    creditamount: creditAmount ? creditAmount : process.env.DEFAULT_CREDIT_AMOUNT,
-                },
-            }]
-        }, {
-            blocksBehind: parseInt(process.env.TRANSACTION_BLOCK_BEHIND),
-            expireSeconds: parseInt(process.env.TRANSACTION_EXPIRE_SECONDS),
-        })
-    } catch (err) {
-        throw err
     }
 }
 

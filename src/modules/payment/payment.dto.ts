@@ -1,42 +1,61 @@
-import { IsString, IsNotEmpty, IsEmail, IsNumber, IsOptional } from 'class-validator'
-import { ApiModelProperty } from '@nestjs/swagger'
+import { IsString, IsEmail,  IsOptional } from 'class-validator'
 
 export class UserRegisterDto {
     @IsString()
-    readonly name: string
+    readonly firstName: string
 
     @IsString()
+    readonly lastName: string
+
+    @IsString()
+    readonly gender: string
+
+    @IsString()
+    readonly contactNumber: string
+
+    @IsString()
+    @IsEmail()
     readonly email: string
     @IsString()
     readonly adharId: string
     @IsString()
-    readonly address: string
+    readonly state: string
+}
+
+export class UpdatePasswordDto {
+    @IsString()
+    @IsOptional()
+    @IsEmail()
+    readonly email: string
+
+    @IsString()
+    readonly password: string
+
+    @IsOptional()
+    @IsString()
+    readonly newPassword: string
+}
+
+export class LoginDto {
+
+    @IsString()
+    readonly voterId: string
+
+    @IsString()
+    @IsEmail()
+    readonly email: string
+
     @IsString()
     readonly password: string
 }
 
-export class TransactionDto {
-    @ApiModelProperty()
+export class VotingDto {
     @IsString()
-    waxUsername: string
-}
+    readonly voterId: string
 
-export class SuccessDto {
-    @ApiModelProperty()
     @IsString()
-    payerId: string
+    readonly vote: string
 
-    @ApiModelProperty()
     @IsString()
-    paymentId: string
-
-    @ApiModelProperty()
-    @IsString()
-    waxUsername: string
-
-    @ApiModelProperty()
-    @IsString()
-    @IsOptional()
-    creditAmount: string
-
+    readonly state: string
 }

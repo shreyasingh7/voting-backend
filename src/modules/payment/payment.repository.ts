@@ -1,45 +1,65 @@
 import { EntityRepository, Repository, QueryBuilder, Connection, getRepository } from 'typeorm'
-import { Withdrawals, Users, Transactions } from './payment.entity'
+import { Users, Votings } from './payment.entity'
 import { getSingleBy, getManyBy } from '../../helpers'
-import { Withdrawal, Transaction } from './payment.types'
+import { UpdatePasswordDto } from './payment.dto'
+import { Query } from '@nestjs/common'
 
 export const getUserBy = getSingleBy(Users)
 
-export const getTransactionBy = getSingleBy(Transactions)
+export const getVotingBy = getSingleBy(Votings)
 
-export const getWithdrawalBy = getSingleBy(Withdrawals)
+export const getVotingsBy = getManyBy(Votings)
 
-export const getWithdrawalsBy = getManyBy(Withdrawals)
+// @EntityRepository(Users)
+// export class UserRepository extends Repository<Users> {
+//     async updatePassword(user: UpdatePasswordDto) {
+//         await getRepository(Users).update(user.password, user)
+//     }
+// }
+
+// export async function getVotingCountBy() {
+//     const sql = `
+//     SELECT SUM(voting), COUNT(*)
+//   FROM votings
+//   GROUP BY
+//     address,
+//     vote
+//     `
+//     const result = await Query(sql)
+//     return (result)
+// }
+
+export async function getCount() {
+    const sql = `
+  SELECT count(*) FROM "votings"
+  where vote = 'BJP'
+    `
+    const result = await Query(sql)
+    return result[0].count
+}
 
 @EntityRepository(Users)
 export class UserRepository extends Repository<Users> {
-    // async insertUser(user: User) {
-    //     await getRepository(Users).insert(user)
-    // }
-}
+    // export const updateExerciseShares = async (db: Database, Id: string) => {
 
-@EntityRepository(Transactions)
-export class TransactionRepository extends Repository<Transactions> {
-
-    async getTransactionByTime(paypalEmail) {
-        const result = await getRepository(Transactions)
-            .createQueryBuilder('transaction')
-            .where('transaction.paypalEmail = :paypalEmail', { paypalEmail })
-            .orderBy('transaction.currentTime', 'DESC')
-            .limit(1)
-            .getOne()
+    async updatePassword(user: UpdatePasswordDto) {
+        const result = await getRepository(Users)
+            .createQueryBuilder('user')
+            .update(Users)
+            .set({ password: user.password })
+            .where('email = :email', { email: user.email })
+            .execute()
         return result
     }
 
-    async insertTransaction(transaction: Transaction) {
-        await getRepository(Transactions).insert(transaction)
+    async updateStatus(user) {
+        const result = await getRepository(Users)
+            .createQueryBuilder('user')
+            .update(Users)
+            .set({ status: true })
+            .where('email = :email', { email: user.email })
+            .execute()
+        return result
     }
-}
 
-@EntityRepository(Withdrawals)
-export class WithdrawalRepository extends Repository<Withdrawals> {
-
-    async insertWithdrawal(withdrawal: Withdrawal) {
-        await getRepository(Withdrawals).insert(withdrawal)
-    }
 }

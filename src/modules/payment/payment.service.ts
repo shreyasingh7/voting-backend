@@ -1,26 +1,17 @@
-import { Injectable, BadRequestException } from '@nestjs/common'
-import { TransactionRepository, getUserBy, WithdrawalRepository, getWithdrawalsBy, UserRepository, getTransactionBy } from './payment.repository'
-import { UserRegisterDto } from './payment.dto'
-import { getTime, transaction } from '../../helpers'
-import { Transaction, Withdrawal, Register } from './payment.types'
-import { Users } from './payment.entity'
-import { IncomingMessage } from 'http'
-import { createDfuseClient } from '@dfuse/client'
-import * as paypal from 'paypal-rest-sdk'
-import * as WebSocketClient from 'ws'
-import uuid from 'uuid'
-import fetch from 'node-fetch'
+import { Injectable } from '@nestjs/common'
+import { getUserBy, UserRepository, getVotingBy, getVotingsBy } from './payment.repository'
+import { UserRegisterDto, UpdatePasswordDto, LoginDto, VotingDto } from './payment.dto'
+import { array } from '../../helpers'
+import { Register, Voting } from './payment.types'
+import { Users, Votings } from './payment.entity'
 import { getRepository } from 'typeorm'
 import * as nodemailer from 'nodemailer'
 import * as validator from 'aadhaar-validator'
-import crypto from 'crypto'
 
 @Injectable()
 export class PaymentService {
     http: any
     constructor(
-        public readonly transactionRepository: TransactionRepository,
-        private readonly withdrawalRepository: WithdrawalRepository,
         private readonly userRepository: UserRepository
     ) {
     }
@@ -31,42 +22,161 @@ export class PaymentService {
         const validate = validator.isValidNumber(userRegisterDto.adharId)
         if (validate) {
             const otp = Math.random().toString(36).substr(2, 11)
+            const pass = Math.random().toString(36).substr(2, 8)
 
             const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: 'aakshitbansal4321@gmail.com',
-                pass: '@kshitban'
-            }
-        })
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false,
+                auth: {
+                    user: 'aakshitbansal4321@gmail.com',
+                    pass: '@kshitban'
+                }
+            })
 
-            const vote = userRegisterDto.address + otp
-            const votingNumber = vote.toUpperCase()
             const info = await transporter.sendMail({
-            from: 'shreyaosm7@gmail.com',
-            to: userRegisterDto.email,
-            subject: 'Sending Email using Node.js',
-            text: 'Hello world?',
-            html: '<p>Do not share this otp with anyone.</p></br><p>Your otp is: ' + votingNumber + '</p>'
-        })
-            const object: Register = {
-            name: userRegisterDto.name,
-            email: userRegisterDto.email,
-            adharId: userRegisterDto.adharId,
-            address: userRegisterDto.address,
-            password: userRegisterDto.password,
-            voterId: votingNumber,
-            status: false,
-        }
-            getRepository(Users).insert(object)
-            return object
+                from: 'electioncommissionofindia91@gmail.com',
+                to: userRegisterDto.email,
+                subject: 'Sending Email using Node.js',
+                text: 'Hello world?',
+                html: '<p>Do not share this password with anyone.</p></br><p>Your Password is: ' + pass + '</p>'
+            })
+            for (let i = 0; i <= 35; i++) {
+                if (array[i].state == userRegisterDto.state) {
+
+                    const vote = array[i].abbreviation + otp
+                    const votingNumber = vote.toUpperCase()
+                    const name = userRegisterDto.firstName + ' ' + userRegisterDto.lastName
+                    const object: Register = {
+                        name,
+                        email: userRegisterDto.email,
+                        adharId: userRegisterDto.adharId,
+                        state: array[i].abbreviation,
+                        voterId: votingNumber,
+                        gender: userRegisterDto.gender,
+                        contactNumber: userRegisterDto.contactNumber,
+                        password: pass,
+                        status: false,
+                    }
+                    getRepository(Users).insert(object)
+                    return object
+
+                }
+            }
+
         }
         else {
             // tslint:disable-next-line: no-console
             console.log('Aadhar invalid')
         }
+    }
+
+    async updatePassword(updatePasswordDto: UpdatePasswordDto) {
+        const user = await getUserBy({ email: updatePasswordDto.email, password: updatePasswordDto.password })
+        if (user) {
+            await this.userRepository.updatePassword({
+                email: user.email, password: updatePasswordDto.newPassword,
+                newPassword: updatePasswordDto.password
+            })
+            const transporter = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 587,
+                secure: false,
+                auth: {
+                    user: 'aakshitbansal4321@gmail.com',
+                    pass: '@kshitban'
+                }
+            })
+
+            const info = await transporter.sendMail({
+                from: 'electioncommissionofindia91@gmail.com',
+                to: user.email,
+                subject: 'Sending Email using Node.js',
+                text: 'Hello world?',
+                html: '<p>Do not share this voterId with anyone.</p></br><p>Your VoterId is: ' + user.voterId + '</p>'
+            })
+        }
+        else {
+            console.log('User doesnot exist')
+        }
+    }
+
+    async login(loginDto: LoginDto) {
+        const user = await getUserBy({ email: loginDto.email, password: loginDto.password, voterId: loginDto.voterId })
+        if (user) {
+            // tslint:disable-next-line: no-console
+            console.log('Login Successful')
+            const nowDate = new Date()
+            const date = nowDate.getFullYear() + '/' + (nowDate.getMonth() + 1) + '/' + nowDate.getDate()
+            const voting = await getVotingBy({ voterId: loginDto.voterId })
+            if (!voting) {
+
+                for (let i = 0; i <= 35; i++) {
+                    if (user.state == array[i].abbreviation) {
+                        if (array[i].date == date) {
+                            console.log('You can vote now!!!!!!!!!!!!!')
+                        }
+                        else {
+                            console.log('Your voting date is on', array[i].date)
+                        }
+                    }
+                }
+            }
+            else {
+                console.log('You have already casted your vote!!!!!!!!!!!!!!')
+            }
+        }
+        else {
+            // tslint:disable-next-line: no-console
+            console.log('Login Unsuccessful')
+        }
+    }
+
+    async voting(votingDto: VotingDto) {
+
+        const user = await getUserBy({ voterId: votingDto.voterId })
+        if (user) {
+            if (user.status == false) {
+                const object: Voting = {
+                    voterId: votingDto.voterId,
+                    vote: votingDto.vote,
+                    state: user.state
+                }
+                getRepository(Votings).insert(object)
+                console.log('Vote Casted Successfully!!!!!!!!!!')
+                await this.userRepository.updateStatus(user)
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    secure: false,
+                    auth: {
+                        user: 'aakshitbansal4321@gmail.com',
+                        pass: '@kshitban'
+                    }
+                })
+
+                const info = await transporter.sendMail({
+                    from: 'electioncommissionofindia91@gmail.com',
+                    to: user.email,
+                    subject: 'Sending Email using Node.js',
+                    text: 'Hello world?',
+                    html: '<p>Your vote has been casted!!!!!!!!!!!!!!</p>'
+                })
+                return object
+            }
+            else {
+                console.log('Your vote is already casted!!!!!!!!!')
+            }
+        }
+
+    }
+
+    async counting(req) {
+        const BJP = await getVotingsBy({vote: 'BJP'})
+        const Congress = await getVotingsBy({vote: 'Congress'})
+        const Other = await getVotingsBy({vote: 'Other'})
+
+
     }
 }
 

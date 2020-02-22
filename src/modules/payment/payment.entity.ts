@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm'
-import { Transaction, Withdrawal, Register } from './payment.types'
+import {  Register, Voting } from './payment.types'
 import { CreatedModified } from '../../helpers'
 
 @Entity()
@@ -12,9 +12,13 @@ export class Users extends CreatedModified implements Register {
     email: string
     @Column({ unique: true })
     adharId: string
-    @Column({ unique: true })
-    address: string
-    @Column({ unique: true })
+    @Column()
+    state: string
+    @Column()
+    gender: string
+    @Column()
+    contactNumber: string
+    @Column({ nullable: true })
     password: string
     @Column({ unique: true })
     voterId: string
@@ -23,46 +27,17 @@ export class Users extends CreatedModified implements Register {
 }
 
 @Entity()
-export class Transactions extends CreatedModified implements Transaction {
+export class Votings extends CreatedModified implements Voting {
     @PrimaryGeneratedColumn('uuid')
     id: string
 
-    @Column()
-    waxUsername: string
+    @Column({ unique: true })
+    voterId: string
 
     @Column()
-    paypalEmail: string
+    vote: string
 
     @Column()
-    currentTime: string
+    state: string
 
-    @Column()
-    dueTime: string
-
-    @Column()
-    transactionAmount: string
-
-    @Column()
-    paymentId: string
-}
-
-@Entity()
-export class Withdrawals extends CreatedModified implements Withdrawal {
-    @PrimaryGeneratedColumn('uuid')
-    id: string
-
-    @Column()
-    waxUsername: string
-
-    @Column()
-    paypalEmail: string
-
-    @Column()
-    currentTime: string
-
-    @Column()
-    dueTime: string
-
-    @Column()
-    withdrawalAmount: string
 }
