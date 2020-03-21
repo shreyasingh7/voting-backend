@@ -138,7 +138,7 @@ export class VotingService {
     async voting(votingDto: VotingDto) {
 
         const user = await getUserBy({ voterId: votingDto.voterId })
-        if (user) {
+        if (user && user.state == votingDto.state) {
             if (user.status == false) {
                 const object: Voting = {
                     voterId: votingDto.voterId,
@@ -154,7 +154,7 @@ export class VotingService {
                     else if (votingDto.vote == 'congress') {
                         await this.countRepository.updateCongress(result)
                     }
-                    else{
+                    else {
                         await this.countRepository.updateOther(result)
                     }
                 }
@@ -171,10 +171,11 @@ export class VotingService {
                     else if (votingDto.vote == 'congress') {
                         obj.congress = obj.congress + 1
                     }
-                    else{
+                    else {
                         obj.other = obj.other + 1
                     }
-                    getRepository(Counts).insert(obj) }
+                    getRepository(Counts).insert(obj)
+                }
                 console.log('Vote Casted Successfully!!!!!!!!!!')
                 await this.userRepository.updateStatus(user)
                 const transporter = nodemailer.createTransport({
@@ -199,6 +200,9 @@ export class VotingService {
             else {
                 console.log('Your vote is already casted!!!!!!!!!')
             }
+        }
+        else {
+            console.log('Incorrect Details!!!!!!!!!!!!!')
         }
 
     }
@@ -234,10 +238,35 @@ export class VotingService {
         return arr
     }
 
-    async count(countDto: CountDto) {
-        if (countDto.region == 'Northern region') {
-            // const result = await getCountBy({state : })
+    async upcomingStateElections(countDto: CountDto) {
+        for (let i = 0; i <= 35; i++) {
+            if (countDto.state == array[i].state) {
+                return array[i]
+            }
+            if (countDto.state == array[i].abbreviation) {
+                return array[i]
+            }
         }
+    }
+
+    async stateResult(countDto: CountDto) {
+        const obj: Count = {
+            state: countDto.state,
+            BJP: 0,
+            congress: 0,
+            other: 0,
+        }
+        const result = await getCountBy({ state: countDto.state })
+        if (result == undefined) {
+            return obj
+        }
+        else {
+            return result
+        }
+
+    }
+
+    async result() {
     }
 }
 

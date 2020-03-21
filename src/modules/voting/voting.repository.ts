@@ -31,14 +31,13 @@ export const getCountBy = getSingleBy(Counts)
 //     return (result)
 // }
 
-export async function getCount() {
-    const sql = `
-  SELECT count(*) FROM "votings"
-  where vote = 'BJP'
-    `
-    const result = await Query(sql)
-    return result[0].count
-}
+// export async function getCount() {
+//     const sql = `
+//   SELECT count(*) FROM "count"
+//     `
+//     const result = await Query(sql)
+//     return result[0].count
+// }
 
 @EntityRepository(Users)
 export class UserRepository extends Repository<Users> {

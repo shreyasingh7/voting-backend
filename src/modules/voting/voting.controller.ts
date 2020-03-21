@@ -22,7 +22,7 @@ export class VotingController {
 
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'Updated'})
-    @ApiOperation({ title: 'To save a user in the register table.' })
+    @ApiOperation({ title: 'To update password.' })
     @Post('password')
     async updatePassword(
         @Body() updatePasswordDto: UpdatePasswordDto
@@ -67,5 +67,34 @@ export class VotingController {
     async elections(
     ) {
         return await this.votingService.upcomingElections()
+    }
+    upcomingStateElections
+
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'Done'})
+    @ApiOperation({ title: 'Statewise Election Detail'})
+    @Post('upcomingStateElections')
+    async stateElections(
+        @Body() countDto: CountDto
+    ) {
+        return await this.votingService.upcomingStateElections(countDto)
+    }
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'Done'})
+    @ApiOperation({ title: 'Election Result'})
+    @Post('stateResult')
+    async stateResult(
+        @Body() countDto: CountDto
+    ) {
+        return await this.votingService.stateResult(countDto)
+    }
+
+    @HttpCode(HttpStatus.OK)
+    @ApiOkResponse({ description: 'Done'})
+    @ApiOperation({ title: 'Election Result'})
+    @Post('result')
+    async result(
+    ) {
+        return await this.votingService.result()
     }
 }
