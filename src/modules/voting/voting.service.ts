@@ -1,5 +1,5 @@
 import { Injectable, BadRequestException } from '@nestjs/common'
-import { getUserBy, UserRepository, getVotingBy, getVotingsBy, getCountBy, CountRepository } from './voting.repository'
+import { getUserBy, UserRepository, getVotingBy, getVotingsBy, getCountBy, CountRepository, getUsersBy } from './voting.repository'
 import { UserRegisterDto, UpdatePasswordDto, LoginDto, VotingDto, ContactDto, CountDto } from './voting.dto'
 import { array } from '../../helpers'
 import { Register, Voting, Contact, Count } from './voting.types'
@@ -23,7 +23,6 @@ export class VotingService {
         userRegisterDto: UserRegisterDto
     ) {
         const validate = validator.isValidNumber(userRegisterDto.adharId)
-        console.log(validate)
         if (validate) {
             const otp = Math.random().toString(36).substr(2, 11)
             const pass = Math.random().toString(36).substr(2, 8)
@@ -44,7 +43,7 @@ export class VotingService {
                 subject: 'Sending Email using Node.js',
                 text: 'Hi' + userRegisterDto.firstName,
                 html: '<p>Welcome To online voting system by ELECTION COMMISSION OF INDIA. Do not share this password with anyone.</p></br><p>Your Password is: '
-                + pass + '</p></br><p>If you want to change the password then use http://localhost:3000/update</p>'
+                    + pass + '</p></br><p>If you want to change the password then use http://localhost:3000/update</p>'
             })
             for (let i = 0; i <= 35; i++) {
                 if (array[i].state == userRegisterDto.state) {
@@ -73,34 +72,46 @@ export class VotingService {
         }
     }
 
-    async updatePassword(updatePasswordDto: UpdatePasswordDto) {
-        const user = await getUserBy({ email: updatePasswordDto.email, password: updatePasswordDto.password })
-        if (user) {
-            await this.userRepository.updatePassword({
-                email: user.email, password: updatePasswordDto.newPassword,
-                newPassword: updatePasswordDto.password
-            })
-            const transporter = nodemailer.createTransport({
-                host: 'smtp.gmail.com',
-                port: 587,
-                secure: false,
-                auth: {
-                    user: 'aakshitbansal4321@gmail.com',
-                    pass: '@kshitban'
-                }
-            })
+    async getAllUsers() {
+        const users = await getUsersBy({});
+        return users;
+    }
 
-            const info = await transporter.sendMail({
-                from: 'electioncommissionofindia91@gmail.com',
-                to: user.email,
-                subject: 'Sending Email using Node.js',
-                text: 'Hello' + user.name,
-                html: '<p>Welcome again!!! Do not share this voterId with anyone.</p></br><p>Your VoterId is: ' + user.voterId + '</p>'
-            })
+    async updatePassword(updatePasswordDto: UpdatePasswordDto) {
+        try {
+            const user = await getUserBy({ email: updatePasswordDto.email, password: updatePasswordDto.password })
+            if (user) {
+                await this.userRepository.updatePassword({
+                    email: user.email,
+                    password: updatePasswordDto.newPassword,
+                    newPassword: updatePasswordDto.password
+                })
+                const transporter = nodemailer.createTransport({
+                    host: 'smtp.gmail.com',
+                    port: 587,
+                    secure: false,
+                    auth: {
+                        user: 'aakshitbansal4321@gmail.com',
+                        pass: '@kshitban'
+                    }
+                })
+
+                const info = await transporter.sendMail({
+                    from: 'electioncommissionofindia91@gmail.com',
+                    to: user.email,
+                    subject: 'Sending Email using Node.js',
+                    text: 'Hello' + user.name,
+                    html: '<p>Welcome again!!! Do not share this voterId with anyone.</p></br><p>Your VoterId is: ' + user.voterId + '</p>'
+                })
+            }
+            else {
+                throw new BadRequestException('User does not exist')
+            }
+        } catch (err) {
+            console.log(err.message)
+            throw new BadRequestException(err.message)
         }
-        else {
-            console.log('User doesnot exist')
-        }
+
     }
 
     async login(loginDto: LoginDto) {
@@ -137,7 +148,7 @@ export class VotingService {
     async voting(votingDto: VotingDto) {
 
         const user = await getUserBy({ voterId: votingDto.voterId })
-        if (user) {
+        if (user && user.state == votingDto.state) {
             if (user.status == false) {
                 const object: Voting = {
                     voterId: votingDto.voterId,
@@ -153,7 +164,7 @@ export class VotingService {
                     else if (votingDto.vote == 'congress') {
                         await this.countRepository.updateCongress(result)
                     }
-                    else{
+                    else {
                         await this.countRepository.updateOther(result)
                     }
                 }
@@ -170,10 +181,11 @@ export class VotingService {
                     else if (votingDto.vote == 'congress') {
                         obj.congress = obj.congress + 1
                     }
-                    else{
+                    else {
                         obj.other = obj.other + 1
                     }
-                    getRepository(Counts).insert(obj) }
+                    getRepository(Counts).insert(obj)
+                }
                 console.log('Vote Casted Successfully!!!!!!!!!!')
                 await this.userRepository.updateStatus(user)
                 const transporter = nodemailer.createTransport({
@@ -198,6 +210,9 @@ export class VotingService {
             else {
                 console.log('Your vote is already casted!!!!!!!!!')
             }
+        }
+        else {
+            console.log('Incorrect Details!!!!!!!!!!!!!')
         }
 
     }
@@ -233,10 +248,35 @@ export class VotingService {
         return arr
     }
 
-    async count(countDto: CountDto) {
-        if (countDto.region == 'Northern region') {
-            // const result = await getCountBy({state : })
+    async upcomingStateElections(countDto: CountDto) {
+        for (let i = 0; i <= 35; i++) {
+            if (countDto.state == array[i].state) {
+                return array[i]
+            }
+            if (countDto.state == array[i].abbreviation) {
+                return array[i]
+            }
         }
+    }
+
+    async stateResult(countDto: CountDto) {
+        const obj: Count = {
+            state: countDto.state,
+            BJP: 0,
+            congress: 0,
+            other: 0,
+        }
+        const result = await getCountBy({ state: countDto.state })
+        if (result == undefined) {
+            return obj
+        }
+        else {
+            return result
+        }
+
+    }
+
+    async result() {
     }
 }
 

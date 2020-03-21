@@ -16,7 +16,7 @@ export class Users extends CreatedModified implements Register {
     state: string
     @Column()
     gender: string
-    @Column()
+    @Column({ unique: true })
     contactNumber: string
     @Column({ nullable: true })
     password: string

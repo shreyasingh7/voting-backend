@@ -96,5 +96,5 @@ export class ContactDto {
 export class CountDto {
     @ApiModelProperty()
     @IsString()
-    readonly region: string
+    readonly state: string
 }
