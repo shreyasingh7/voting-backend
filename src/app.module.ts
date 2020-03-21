@@ -5,7 +5,7 @@ import { contextMiddleware } from './middlewares'
 import { ConfigService } from './shared/services/config.service'
 import { SharedModule } from './shared/shared.module'
 import { DefaultAdminModule } from 'nestjs-admin'
-import { PaymentModule } from './modules/payment/payment.module'
+import { VotingModule } from './modules/voting/voting.module'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 
@@ -18,7 +18,7 @@ import { AppService } from './app.service'
             inject: [ConfigService],
         }),
         DefaultAdminModule,
-        PaymentModule
+        VotingModule
     ],
     controllers: [AppController],
     providers: [AppService]

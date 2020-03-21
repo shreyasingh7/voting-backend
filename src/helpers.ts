@@ -8,185 +8,185 @@ export const array = [
     {
         state: 'Andaman and Nicobar Islands',
         abbreviation: 'AN',
-        date: '2020/2/22'
+        date: '2020/3/21'
     },
     {
         state: 'Andhra Pradesh',
         abbreviation: 'AP',
-        date: '2020/2/23'
+        date: '2020/3/21'
     },
     {
         state: 'Arunachal Pradesh',
         abbreviation: 'AR',
-        date: '2020/2/24'
+        date: '2020/4/7'
     },
     {
         state: 'Assam',
         abbreviation: 'AS',
-        date: '2020/2/25'
+        date: '2020/4/8'
     },
     {
         state: 'Bihar',
-        abbreviation: '	BR',
-        date: '2020/2/26'
+        abbreviation: 'BR',
+        date: '2020/4/9'
     },
     {
         state: 'Chandigarh',
         abbreviation: 'CH',
-        date: '2020/2/27'
+        date: '2020/4/10'
     },
     {
         state: 'Chhattisgarh',
         abbreviation: 'CT',
-        date: '2020/2/28'
+        date: '2020/4/11'
     },
     {
         state: 'Dadra and Nagar Haveli',
         abbreviation: 'DN',
-        date: '2020/2/29'
+        date: '2020/4/12'
     },
     {
         state: 'Daman and Diu',
         abbreviation: 'DD',
-        date: '2020/3/01'
+        date: '2020/4/13'
     },
     {
         state: 'Delhi',
         abbreviation: 'DL',
-        date: '2020/3/02'
+        date: '2020/4/14'
     },
     {
         state: 'Goa',
         abbreviation: 'GA',
-        date: '2020/3/03'
+        date: '2020/4/15'
     },
     {
         state: 'Gujarat',
         abbreviation: 'GJ',
-        date: '2020/3/04'
+        date: '2020/4/16'
     },
     {
         state: 'Haryana',
         abbreviation: 'HR',
-        date: '2020/3/05'
+        date: '2020/4/17'
     },
     {
         state: 'Himachal Pradesh',
         abbreviation: 'HP',
-        date: '2020/3/06'
+        date: '2020/4/18'
     },
     {
         state: 'Jammu and Kashmir',
         abbreviation: 'JK',
-        date: '2020/3/07'
+        date: '2020/4/19'
     },
     {
         state: 'Jharkhand',
         abbreviation: 'JH',
-        date: '2020/3/08'
+        date: '2020/4/20'
     },
     {
         state: 'Karnataka',
         abbreviation: 'KA',
-        date: '2020/3/09'
+        date: '2020/4/21'
     },
     {
         state: 'Kerala',
         abbreviation: 'KL',
-        date: '2020/3/10'
+        date: '2020/4/22'
     },
     {
         state: 'Lakshadweep',
         abbreviation: 'LD',
-        date: '2020/3/11'
+        date: '2020/4/23'
     },
     {
         state: 'Madhya Pradesh',
         abbreviation: 'MP',
-        date: '2020/3/12'
+        date: '2020/4/24'
     },
     {
         state: 'Maharashtra',
-        abbreviation: '	MH',
-        date: '2020/3/13'
+        abbreviation: 'MH',
+        date: '2020/4/25'
     },
     {
         state: 'Manipur',
         abbreviation: 'MN',
-        date: '2020/3/10'
+        date: '2020/4/26'
     },
     {
         state: 'Meghalaya',
         abbreviation: 'ML',
-        date: '2020/3/15'
+        date: '2020/4/27'
     },
     {
         state: 'Mizoram',
-        abbreviation: '	MZ',
-        date: '2020/3/16'
+        abbreviation: 'MZ',
+        date: '2020/4/28'
     },
     {
         state: 'Nagaland',
         abbreviation: 'NL',
-        date: '2020/3/17'
+        date: '2020/4/29'
     },
     {
         state: 'Odisha',
         abbreviation: 'OR',
-        date: '2020/3/18'
+        date: '2020/4/30'
     },
     {
         state: 'Puducherry',
-        abbreviation: '	PY',
-        date: '2020/3/19'
+        abbreviation: 'PY',
+        date: '2020/5/1'
     },
     {
         state: 'Punjab',
         abbreviation: 'PB',
-        date: '2020/3/20'
+        date: '2020/5/2'
     },
 
     {
         state: 'Rajasthan',
         abbreviation: 'RJ',
-        date: '2020/3/21'
+        date: '2020/5/3'
     },
 
     {
         state: 'Sikkim',
         abbreviation: 'SK',
-        date: '2020/3/22'
+        date: '2020/5/4'
     },
 
     {
         state: 'Tamil Nadu',
         abbreviation: 'TN',
-        date: '2020/3/23'
+        date: '2020/5/5'
     },
     {
         state: 'Telangana',
         abbreviation: 'TG',
-        date: '2020/3/24'
+        date: '2020/5/6'
     },
     {
         state: 'Tripura',
         abbreviation: 'TR',
-        date: '2020/3/25'
+        date: '2020/5/7'
     },
     {
         state: 'Uttar Pradesh',
         abbreviation: 'UP',
-        date: '2020/3/26'
+        date: '2020/5/8'
     },
     {
         state: 'Uttarakhand',
         abbreviation: 'UT',
-        date: '2020/3/27'
+        date: '2020/5/9'
     },
     {
         state: 'West Bengal',
         abbreviation: 'WB',
-        date: '2020/3/28'
+        date: '2020/5/10'
     }
 
 ]
