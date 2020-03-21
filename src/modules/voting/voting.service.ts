@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, BadRequestException } from '@nestjs/common'
 import { getUserBy, UserRepository, getVotingBy, getVotingsBy, getCountBy, CountRepository } from './voting.repository'
 import { UserRegisterDto, UpdatePasswordDto, LoginDto, VotingDto, ContactDto, CountDto } from './voting.dto'
 import { array } from '../../helpers'
@@ -23,6 +23,7 @@ export class VotingService {
         userRegisterDto: UserRegisterDto
     ) {
         const validate = validator.isValidNumber(userRegisterDto.adharId)
+        console.log(validate)
         if (validate) {
             const otp = Math.random().toString(36).substr(2, 11)
             const pass = Math.random().toString(36).substr(2, 8)
@@ -42,7 +43,8 @@ export class VotingService {
                 to: userRegisterDto.email,
                 subject: 'Sending Email using Node.js',
                 text: 'Hi' + userRegisterDto.firstName,
-                html: '<p>Welcome To online voting system by ELECTION COMMISSION OF INDIA. Do not share this password with anyone.</p></br><p>Your Password is: ' + pass + '</p>'
+                html: '<p>Welcome To online voting system by ELECTION COMMISSION OF INDIA. Do not share this password with anyone.</p></br><p>Your Password is: '
+                + pass + '</p></br><p>If you want to change the password then use http://localhost:3000/update</p>'
             })
             for (let i = 0; i <= 35; i++) {
                 if (array[i].state == userRegisterDto.state) {
@@ -63,14 +65,11 @@ export class VotingService {
                     }
                     getRepository(Users).insert(object)
                     return object
-
                 }
             }
-
         }
         else {
-            // tslint:disable-next-line: no-console
-            console.log('Aadhar invalid')
+            throw new BadRequestException('Adhaar Invalid..')
         }
     }
 

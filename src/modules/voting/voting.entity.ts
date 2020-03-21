@@ -6,7 +6,7 @@ import { CreatedModified } from '../../helpers'
 export class Users extends CreatedModified implements Register {
     @PrimaryGeneratedColumn('uuid')
     id: string
-    @Column({ unique: true })
+    @Column()
     name: string
     @Column({ unique: true })
     email: string
