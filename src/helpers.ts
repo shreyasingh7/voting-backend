@@ -1,192 +1,189 @@
 import { ObjectType, EntitySchema, getRepository, CreateDateColumn, UpdateDateColumn } from 'typeorm'
-import { JsonRpc, Api } from 'eosjs'
-import { JsSignatureProvider } from 'eosjs/dist/eosjs-jssig'
-import fetch from 'node-fetch'
-import { TextDecoder, TextEncoder } from 'util'
+import * as moment from 'moment'
 
 export const array = [
     {
         state: 'Andaman and Nicobar Islands',
         abbreviation: 'AN',
-        date: '2020/3/21'
+        date: moment().add(2, 'days')
     },
     {
         state: 'Andhra Pradesh',
         abbreviation: 'AP',
-        date: '2020/3/21'
+        date: moment().add(3, 'days')
     },
     {
         state: 'Arunachal Pradesh',
         abbreviation: 'AR',
-        date: '2020/4/7'
+        date: moment().add(4, 'days')
     },
     {
         state: 'Assam',
         abbreviation: 'AS',
-        date: '2020/4/8'
+        date: moment().add(5, 'days')
     },
     {
         state: 'Bihar',
         abbreviation: 'BR',
-        date: '2020/4/9'
+        date: moment().add(6, 'days')
     },
     {
         state: 'Chandigarh',
         abbreviation: 'CH',
-        date: '2020/4/10'
+        date: moment().add(7, 'days')
     },
     {
         state: 'Chhattisgarh',
         abbreviation: 'CT',
-        date: '2020/4/11'
+        date: moment().add(8, 'days')
     },
     {
         state: 'Dadra and Nagar Haveli',
         abbreviation: 'DN',
-        date: '2020/4/12'
+        date: moment().add(9, 'days')
     },
     {
         state: 'Daman and Diu',
         abbreviation: 'DD',
-        date: '2020/4/13'
+        date: moment().add(10, 'days')
     },
     {
         state: 'Delhi',
         abbreviation: 'DL',
-        date: '2020/4/14'
+        date: moment().add(11, 'days')
     },
     {
         state: 'Goa',
         abbreviation: 'GA',
-        date: '2020/4/15'
+        date: moment().add(12, 'days')
     },
     {
         state: 'Gujarat',
         abbreviation: 'GJ',
-        date: '2020/4/16'
+        date: moment().add(13, 'days')
     },
     {
         state: 'Haryana',
         abbreviation: 'HR',
-        date: '2020/4/17'
+        date: moment().add(14, 'days')
     },
     {
         state: 'Himachal Pradesh',
         abbreviation: 'HP',
-        date: '2020/4/18'
+        date: moment().add(15, 'days')
     },
     {
         state: 'Jammu and Kashmir',
         abbreviation: 'JK',
-        date: '2020/4/19'
+        date: moment().add(16, 'days')
     },
     {
         state: 'Jharkhand',
         abbreviation: 'JH',
-        date: '2020/4/20'
+        date: moment().add(17, 'days')
     },
     {
         state: 'Karnataka',
         abbreviation: 'KA',
-        date: '2020/4/21'
+        date: moment().add(18, 'days')
     },
     {
         state: 'Kerala',
         abbreviation: 'KL',
-        date: '2020/4/22'
+        date: moment().add(19, 'days')
     },
     {
         state: 'Lakshadweep',
         abbreviation: 'LD',
-        date: '2020/4/23'
+        date: moment().add(20, 'days')
     },
     {
         state: 'Madhya Pradesh',
         abbreviation: 'MP',
-        date: '2020/4/24'
+        date: moment().add(21, 'days')
     },
     {
         state: 'Maharashtra',
         abbreviation: 'MH',
-        date: '2020/4/25'
+        date: moment().add(22, 'days')
     },
     {
         state: 'Manipur',
         abbreviation: 'MN',
-        date: '2020/4/26'
+        date: moment().add(23, 'days')
     },
     {
         state: 'Meghalaya',
         abbreviation: 'ML',
-        date: '2020/4/27'
+        date: moment().add(24, 'days')
     },
     {
         state: 'Mizoram',
         abbreviation: 'MZ',
-        date: '2020/4/28'
+        date: moment().add(25, 'days')
     },
     {
         state: 'Nagaland',
         abbreviation: 'NL',
-        date: '2020/4/29'
+        date: moment().add(26, 'days')
     },
     {
         state: 'Odisha',
         abbreviation: 'OR',
-        date: '2020/4/30'
+        date: moment().add(27, 'days')
     },
     {
         state: 'Puducherry',
         abbreviation: 'PY',
-        date: '2020/5/1'
+        date: moment().add(28, 'days')
     },
     {
         state: 'Punjab',
         abbreviation: 'PB',
-        date: '2020/5/2'
+        date: moment().add(29, 'days')
     },
 
     {
         state: 'Rajasthan',
         abbreviation: 'RJ',
-        date: '2020/5/3'
+        date: moment().add(30, 'days')
     },
 
     {
         state: 'Sikkim',
         abbreviation: 'SK',
-        date: '2020/5/4'
+        date: moment().add(31, 'days')
     },
 
     {
         state: 'Tamil Nadu',
         abbreviation: 'TN',
-        date: '2020/5/5'
+        date: moment().add(32, 'days')
     },
     {
         state: 'Telangana',
         abbreviation: 'TG',
-        date: '2020/5/6'
+        date: moment().add(33, 'days')
     },
     {
         state: 'Tripura',
         abbreviation: 'TR',
-        date: '2020/5/7'
+        date: moment().add(34, 'days')
     },
     {
         state: 'Uttar Pradesh',
         abbreviation: 'UP',
-        date: '2020/5/8'
+        date: moment().add(35, 'days')
     },
     {
         state: 'Uttarakhand',
         abbreviation: 'UT',
-        date: '2020/5/9'
+        date: moment().add(36, 'days')
     },
     {
         state: 'West Bengal',
         abbreviation: 'WB',
-        date: '2020/5/10'
+        date: moment().add(37, 'days')
     }
 
 ]

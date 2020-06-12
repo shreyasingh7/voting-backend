@@ -7,8 +7,8 @@ import { Users, Votings, Contacts, Counts } from './voting.entity'
 import { getRepository } from 'typeorm'
 import * as nodemailer from 'nodemailer'
 import * as validator from 'aadhaar-validator'
-import * as TelegramBot from 'node-telegram-bot-api'
 import * as unirest from 'unirest'
+import * as moment from 'moment'
 
 @Injectable()
 export class VotingService {
@@ -26,18 +26,16 @@ export class VotingService {
         if (validate) {
             const otp = Math.random().toString(36).substr(2, 11)
             const pass = Math.random().toString(36).substr(2, 8)
-
             const transporter = nodemailer.createTransport({
                 host: 'smtp.gmail.com',
                 port: 587,
                 secure: false,
                 auth: {
-                    user: 'aakshitbansal4321@gmail.com',
-                    pass: '@kshitban'
+                    user: 'electioncommissionofindia91@gmail.com',
+                    pass: 'jio@9956771141'
                 }
             })
-
-            const info = await transporter.sendMail({
+            await transporter.sendMail({
                 from: 'electioncommissionofindia91@gmail.com',
                 to: userRegisterDto.email,
                 subject: 'Sending Email using Node.js',
@@ -55,7 +53,7 @@ export class VotingService {
                         name,
                         email: userRegisterDto.email,
                         adharId: userRegisterDto.adharId,
-                        state: array[i].abbreviation,
+                        state: array[i].state,
                         voterId: votingNumber,
                         gender: userRegisterDto.gender,
                         contactNumber: userRegisterDto.contactNumber,
@@ -73,8 +71,8 @@ export class VotingService {
     }
 
     async getAllUsers() {
-        const users = await getUsersBy({});
-        return users;
+        const users = await getUsersBy({})
+        return users
     }
 
     async updatePassword(updatePasswordDto: UpdatePasswordDto) {
@@ -91,8 +89,8 @@ export class VotingService {
                     port: 587,
                     secure: false,
                     auth: {
-                        user: 'aakshitbansal4321@gmail.com',
-                        pass: '@kshitban'
+                        user: 'electioncommissionofindia91@gmail.com',
+                        pass: 'jio@9956771141'
                     }
                 })
 
@@ -119,30 +117,37 @@ export class VotingService {
         if (user) {
             // tslint:disable-next-line: no-console
             console.log('Login Successful')
-            const nowDate = new Date()
-            const date = nowDate.getFullYear() + '/' + (nowDate.getMonth() + 1) + '/' + nowDate.getDate()
+            const beforeDate = moment().valueOf()
+            const afterDate = moment().valueOf() + 86400
             const voting = await getVotingBy({ voterId: loginDto.voterId })
             if (!voting) {
 
                 for (let i = 0; i <= 35; i++) {
                     if (user.state == array[i].abbreviation) {
-                        if (array[i].date == date) {
-                            console.log('You can vote now!!!!!!!!!!!!!')
+                        if (array[i].date.valueOf() >= beforeDate && array[i].date.valueOf() <= afterDate) {
+                            return {
+                                message: 'You can vote now!!!!!!!!!!!!!',
+                                status: true
+                            }
                         }
                         else {
-                            console.log('Your voting date is on', array[i].date)
+                            return {
+                                message: 'Your voting date is on' + array[i].date,
+                                status: true
+                            }
                         }
                     }
                 }
             }
             else {
-                console.log('You have already casted your vote!!!!!!!!!!!!!!')
+                throw new BadRequestException('You have already casted your vote!!!!!!!!!!!!!!')
+                // return {
+                //     message: 'You have already casted your vote!!!!!!!!!!!!!!',
+                //     status: true
+                // }
             }
         }
-        else {
-            // tslint:disable-next-line: no-console
-            console.log('Login Unsuccessful')
-        }
+        else throw new BadRequestException('User not found..')
     }
 
     async voting(votingDto: VotingDto) {
@@ -193,8 +198,8 @@ export class VotingService {
                     port: 587,
                     secure: false,
                     auth: {
-                        user: 'aakshitbansal4321@gmail.com',
-                        pass: '@kshitban'
+                        user: 'electioncommissionofindia91@gmail.com',
+                        pass: 'jio@9956771141'
                     }
                 })
 
@@ -209,10 +214,12 @@ export class VotingService {
             }
             else {
                 console.log('Your vote is already casted!!!!!!!!!')
+                throw new BadRequestException('Your vote is already casted!!!!!!!!!')
             }
         }
         else {
             console.log('Incorrect Details!!!!!!!!!!!!!')
+            throw new BadRequestException('Incorrect Details!!!!!!!!!!!!!')
         }
 
     }
@@ -236,11 +243,10 @@ export class VotingService {
 
     async upcomingElections() {
         const arr = []
-        const nowDate = new Date()
         for (let i = 0; i <= 35; i++) {
-            const date = nowDate.getFullYear() + '/' + (nowDate.getMonth() + 1) + '/' + nowDate.getDate()
+            const date = moment().valueOf()
 
-            if (array[i].date >= date) {
+            if (array[i].date.valueOf() >= date) {
                 arr.push(array[i])
             }
 

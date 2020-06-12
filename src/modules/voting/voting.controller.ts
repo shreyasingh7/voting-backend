@@ -22,7 +22,7 @@ export class VotingController {
 
     @Get('getUsers')
     async getUsers() {
-        return await this.votingService.getAllUsers();
+        return await this.votingService.getAllUsers()
     }
 
     @HttpCode(HttpStatus.OK)
@@ -73,7 +73,6 @@ export class VotingController {
     ) {
         return await this.votingService.upcomingElections()
     }
-    upcomingStateElections
 
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'Done'})
@@ -84,6 +83,7 @@ export class VotingController {
     ) {
         return await this.votingService.upcomingStateElections(countDto)
     }
+
     @HttpCode(HttpStatus.OK)
     @ApiOkResponse({ description: 'Done'})
     @ApiOperation({ title: 'Election Result'})

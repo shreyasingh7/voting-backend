@@ -4,7 +4,7 @@ import { CreatedModified } from '../../helpers'
 
 @Entity()
 export class Users extends CreatedModified implements Register {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     id: string
     @Column()
     name: string
@@ -28,7 +28,7 @@ export class Users extends CreatedModified implements Register {
 
 @Entity()
 export class Votings extends CreatedModified implements Voting {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     id: string
 
     @Column({ unique: true })
@@ -44,7 +44,7 @@ export class Votings extends CreatedModified implements Voting {
 
 @Entity()
 export class Contacts extends CreatedModified implements Contact {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     id: string
 
     @Column()
@@ -59,7 +59,7 @@ export class Contacts extends CreatedModified implements Contact {
 
 @Entity()
 export class Counts extends CreatedModified implements Count {
-    @PrimaryGeneratedColumn('uuid')
+    @PrimaryGeneratedColumn()
     id: string
 
     @Column()

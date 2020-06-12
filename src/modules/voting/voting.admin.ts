@@ -3,10 +3,6 @@ import { Users } from './voting.entity'
 
 export class UserAdmin extends AdminEntity {
   entity = Users
-  // listDisplay = [ 'waxUsername', 'paypalEmail']
-  // searchFields = ['waxUsername']
-
-  widgets = {
-    password: PasswordWidget
-  }
+  listDisplay = ['id', 'name', 'email', 'adharId', 'state', 'gender', 'contactNumber', 'voterId', 'status']
+  searchFields = ['id', 'name', 'email', 'adharId', 'state', 'gender', 'contactNumber', 'voterId']
 }
